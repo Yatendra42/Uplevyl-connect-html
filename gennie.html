@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gennie - AI Assistant Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            /* Fluid responsive typography: automatically scales from 10px on mobile (320px) to 16px on desktop (1920px+) */
+            font-size: clamp(0.625rem, 0.5rem + 0.5vw, 1rem);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 5rem;
+            background: #0f0f0f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.25rem 0;
+            border-right: 1px solid #2a2a2a;
+            position:sticky;
+            height: calc(100vh);
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar-logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-item {
+            width: 3.75rem;
+            height: 3.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            color: #808080;
+            text-align: center;
+            text-decoration: none;
+        }
+
+         .nav-item svg { height: 1.875rem;  }
+
+        .nav-item:hover {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background: #2a2a2a;
+            color: #ff6b35;
+        }
+
+        .nav-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.625rem;
+            font-weight: 500;
+            color: inherit;
+            text-decoration: none;
+
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Gradient Background */
+        .gradient-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, 
+                    rgba(139, 69, 139, 0.25) 0%,
+                    transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 50%, 
+                    rgba(218, 165, 32, 0.15) 0%,
+                    transparent 50%),
+                radial-gradient(ellipse 70% 50% at 20% 80%, 
+                    rgba(107, 142, 35, 0.12) 0%,
+                    transparent 50%),
+                linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            pointer-events: none;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.8), transparent);
+            border-radius: 50%;
+            animation: float 20s infinite;
+            opacity: 0.6;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 10s; }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.6);
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-button {
+            width: 2.75rem;
+            height: 2.75rem;
+            background: rgba(42, 42, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .icon-button:hover::before {
+            opacity: 1;
+        }
+
+        .icon-button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 107, 53, 0.5);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-greeting {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.375rem;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0.25rem 1.25rem rgba(255, 255, 255, 0.1);
+            letter-spacing: -0.0625rem;
+        }
+
+        .hero-tagline {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2.25rem;
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #fdc830 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.05rem;
+            position: relative;
+        }
+
+        .hero-tagline::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+            border-radius: 2px;
+        }
+
+        /* Discovery Button */
+        .discovery-button {
+            width: 100%;
+            max-width: 40rem;
+            padding: 1.25rem 2.5rem;
+            background: rgba(42, 42, 42, 0.8);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 1rem;
+            color: #ffffff;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discovery-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .discovery-button:hover::before {
+            width: 600px;
+            height: 600px;
+        }
+
+        .discovery-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: #ff6b35;
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .discovery-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .discovery-button svg {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .discovery-button:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Suggestions Grid */
+        .suggestions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 40px;
+        }
+
+        .suggestion-card {
+            padding: 1.75rem;
+            background: rgba(42, 42, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b35, #f7931e, #fdc830);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .suggestion-card:hover::before {
+            opacity: 1;
+        }
+
+        .suggestion-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .suggestion-card:hover::after {
+            opacity: 1;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 107, 53, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .suggestion-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0.25rem 0.5rem rgba(255, 107, 53, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-card:hover .suggestion-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .suggestion-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .suggestion-description {
+            font-size: 14px;
+            color: #b3b3b3;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Input Container */
+        .input-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .main-input-wrapper {
+            position: relative;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 11.25rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+        }
+
+        .main-input-wrapper:focus-within {
+            border-color: #ff6b35;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3), 0 0 0 4px rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .main-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-size: 17px;
+            font-family: inherit;
+            resize: none;
+            min-height: 90px;
+            line-height: 1.6;
+        }
+
+        .main-input::placeholder {
+            color: #666666;
+            font-weight: 400;
+        }
+
+        /* Input Actions */
+        .input-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            width: 3rem;
+            height: 3rem;
+            background: rgba(58, 58, 58, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .action-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .action-button:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 107, 53, 0.5);
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+        }
+
+        .action-button.primary:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 24px rgba(255, 107, 53, 0.6);
+        }
+
+        /* Evolution Notice */
+        .evolution-notice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: rgba(42, 42, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            font-size: 14px;
+            color: #b3b3b3;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .evolution-notice svg {
+            width: 18px;
+            height: 18px;
+            color: #ff6b35;
+            filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.5));
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            position: absolute;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 10;
+        }
+
+        .quick-action-card {
+            padding: 14px 28px;
+            background: rgba(42, 42, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quick-action-card:hover::before {
+            opacity: 1;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 53, 0.5);
+            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+        }
+
+        .quick-action-card span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        /* Tablet and smaller screens */
+        @media (max-width: 1024px) {
+            .hero-greeting {
+                font-size: 48px;
+            }
+
+            .hero-tagline {
+                font-size: 36px;
+            }
+
+            .suggestions-container {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        /* Mobile screens */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 3.75rem;
+            }
+
+            .sidebar {
+                width: 3.75rem;
+                padding: 1rem 0;
+            }
+            
+            .sidebar-logo {
+                width: 2rem;
+                height: 2rem;
+            }
+            
+            .nav-item {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            .nav-label {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .hero-greeting {
+                font-size: 36px;
+                margin-bottom: 8px;
+            }
+
+            .hero-tagline {
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+
+            .top-bar {
+                padding: 16px 20px;
+            }
+
+            .hero-section {
+                padding: 20px 16px;
+            }
+
+            .discovery-button {
+                padding: 16px 32px;
+                font-size: 16px;
+                margin-bottom: 32px;
+            }
+
+            .suggestions-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 32px;
+            }
+
+            .suggestion-card {
+                padding: 20px;
+            }
+
+            .suggestion-icon {
+                font-size: 28px;
+            }
+
+            .suggestion-title {
+                font-size: 16px;
+            }
+
+            .input-container {
+                margin-bottom: 20px;
+            }
+
+            .main-input-wrapper {
+                padding: 20px;
+                min-height: 140px;
+            }
+
+            .main-input {
+                font-size: 15px;
+                min-height: 70px;
+            }
+
+            .action-button {
+                width: 44px;
+                height: 44px;
+            }
+
+            .evolution-notice {
+                padding: 12px 20px;
+                font-size: 13px;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+                bottom: 20px;
+                gap: 8px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .hero-greeting {
+                font-size: 28px;
+            }
+
+            .hero-tagline {
+                font-size: 20px;
+            }
+
+            .top-bar {
+                padding: 12px 16px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .hero-section {
+                padding: 16px 12px;
+            }
+
+            .discovery-button {
+                padding: 14px 24px;
+                font-size: 15px;
+            }
+
+            .suggestion-card {
+                padding: 16px;
+            }
+
+            .suggestion-icon {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+
+            .suggestion-title {
+                font-size: 15px;
+            }
+
+            .suggestion-description {
+                font-size: 13px;
+            }
+
+            .main-input-wrapper {
+                padding: 16px;
+                min-height: 120px;
+            }
+
+            .main-input {
+                font-size: 14px;
+                min-height: 60px;
+            }
+
+            .input-actions {
+                margin-top: 16px;
+            }
+
+            .action-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .evolution-notice {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+
+            .icon-button {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-greeting,
+        .hero-tagline,
+        .discovery-button,
+        .input-container,
+        .evolution-notice {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+
+        .suggestion-card {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+
+        .suggestion-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .suggestion-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .suggestion-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .hero-tagline {
+            animation-delay: 0.1s;
+        }
+
+        .discovery-button {
+            animation-delay: 0.2s;
+        }
+
+        .input-container {
+            animation-delay: 0.4s;
+        }
+
+        .evolution-notice {
+            animation-delay: 0.5s;
+        }
+
+        .quick-actions {
+            animation: fadeIn 1s ease-out backwards;
+            animation-delay: 0.6s;
+        }
+
+        /* Glow effect */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
+            }
+        }
+
+   
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+       <div class="sidebar">
+        <div class="sidebar-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" fill="none">
+<g clip-path="url(#clip0_11728_142)">
+<path d="M20 12H5C2.51472 12 0.5 14.0147 0.5 16.5V31.5C0.5 33.9853 2.51472 36 5 36H20C22.4853 36 24.5 33.9853 24.5 31.5V16.5C24.5 14.0147 22.4853 12 20 12Z" fill="url(#paint0_linear_11728_142)" fill-opacity="0.4"/>
+<path d="M26 6H11C8.51472 6 6.5 8.01472 6.5 10.5V25.5C6.5 27.9853 8.51472 30 11 30H26C28.4853 30 30.5 27.9853 30.5 25.5V10.5C30.5 8.01472 28.4853 6 26 6Z" fill="url(#paint1_linear_11728_142)" fill-opacity="0.6"/>
+<path d="M32 0H17C14.5147 0 12.5 2.01472 12.5 4.5V19.5C12.5 21.9853 14.5147 24 17 24H32C34.4853 24 36.5 21.9853 36.5 19.5V4.5C36.5 2.01472 34.4853 0 32 0Z" fill="url(#paint2_linear_11728_142)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_11728_142" x1="0.5" y1="36" x2="29.1046" y2="36" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F50157"/>
+<stop offset="0.735577" stop-color="#FFDA00"/>
+</linearGradient>
+<linearGradient id="paint1_linear_11728_142" x1="6.5" y1="30" x2="35.1046" y2="30" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F50157"/>
+<stop offset="0.735577" stop-color="#FFDA00"/>
+</linearGradient>
+<linearGradient id="paint2_linear_11728_142" x1="12.5" y1="24" x2="41.1046" y2="24" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F50157"/>
+<stop offset="0.735577" stop-color="#FFDA00"/>
+</linearGradient>
+<clipPath id="clip0_11728_142">
+<rect width="36" height="36" fill="white" transform="translate(0.5)"/>
+</clipPath>
+</defs>
+</svg>
+        </div>
+        
+        <a href="gennie.html" class="nav-item active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="120" height="127" viewBox="0 0 120 127" fill="none">
+<path d="M30.4099 19.8269V55.0981M30.4099 90.0501L2 107.196M30.4099 90.0501L60 107.196M30.4099 90.0501V55.0981M118 107.196L89 124L60 107.196M118 107.196L89 90.3921M118 107.196V71.996L89 55.2702M89 90.3921L31 124L2 107.196M89 90.3921V55.0981V19.8042L60 3M2 107.196V72.8816L30.4099 55.0981M60 107.196V72.244M60 3L30.4099 19.8042M60 3V72.0742M89 55.2702L60 38.5445L30.4099 55.0981M89 55.2702L60 72.0742M60 72.0742V72.244M30.4099 55.0981L60 72.244" stroke="url(#paint0_linear_8185_20766)" stroke-width="4"/>
+<defs>
+<linearGradient id="paint0_linear_8185_20766" x1="2" y1="124" x2="140.256" y2="124" gradientUnits="userSpaceOnUse">
+<stop offset="0.0721154" stop-color="#F50157"/>
+<stop offset="0.740385" stop-color="#FFDA00"/>
+</linearGradient>
+</defs>
+</svg>
+             <span class="nav-label">Genie</span>
+        </a>
+
+        <a href="#" class="nav-item">
+           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFDE4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass h-[3.6vh] w-[3.6vh] min-h-[24px] min-w-[24px] p-1 ant-menu-item-icon"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path><circle cx="12" cy="12" r="10"></circle></svg>
+            <span class="nav-label">Explore</span>
+        </a>
+
+        <a href="index.html" class="nav-item">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+             <span class="nav-label">Connect</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <span class="nav-label">Feed</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span class="nav-label">Future Forward</span>
+        </a>
+
+        <div style="flex: 1;"></div>
+
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <span class="nav-label">Chats</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <span class="nav-label">Profile</span>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Gradient Background -->
+        <div class="gradient-background"></div>
+
+        <!-- Floating Particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title">UpGennie</h1>
+            <div class="top-actions">
+                <button class="icon-button">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </button>
+                <button class="icon-button">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2 class="hero-greeting">Hello, Yatendra!</h2>
+            <h3 class="hero-tagline">Ask, connect, learn, or brainstorm!</h3>
+
+            <!-- Discovery Button -->
+            <button class="discovery-button">
+                <span>Discover UpNews</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </button>
+
+            <!-- Suggestions Grid -->
+            <div class="suggestions-container">
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">💡</div>
+                    <div class="suggestion-title">Get Ideas</div>
+                    <div class="suggestion-description">Brainstorm creative solutions and innovative concepts for your projects</div>
+                </div>
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">📚</div>
+                    <div class="suggestion-title">Learn Something New</div>
+                    <div class="suggestion-description">Explore fascinating topics and expand your knowledge horizons</div>
+                </div>
+                <div class="suggestion-card">
+                    <div class="suggestion-icon">🤝</div>
+                    <div class="suggestion-title">Connect & Collaborate</div>
+                    <div class="suggestion-description">Find like-minded peers and mentors in your field of interest</div>
+                </div>
+            </div>
+
+            <!-- Input Container -->
+            <div class="input-container">
+                <div class="main-input-wrapper">
+                    <textarea 
+                        class="main-input" 
+                        placeholder="Start typing, and let's create something great!"
+                        rows="3"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="action-button">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                            </svg>
+                        </button>
+                        <button class="action-button primary">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolution Notice -->
+            <div class="evolution-notice">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <span>Gennie continues to evolve everyday</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions (Bottom) -->
+        <!-- <div class="quick-actions">
+            <div class="quick-action-card"><span>✨ Creative Writing</span></div>
+            <div class="quick-action-card"><span>🎯 Problem Solving</span></div>
+            <div class="quick-action-card"><span>📊 Data Analysis</span></div>
+        </div> -->
+    </div>
+
+    <script>
+        // Auto-expand textarea
+        const textarea = document.querySelector('.main-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // Navigation click handlers
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Suggestion card click handlers
+        document.querySelectorAll('.suggestion-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.suggestion-title').textContent;
+                textarea.value = `Help me with: ${title}`;
+                textarea.focus();
+                
+                // Add ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.cssText = 'position:absolute;width:20px;height:20px;background:rgba(255,107,53,0.5);border-radius:50%;pointer-events:none;';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Quick action click handlers
+        document.querySelectorAll('.quick-action-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const text = this.textContent.trim();
+                textarea.value = `I need help with ${text.split(' ').slice(1).join(' ').toLowerCase()}`;
+                textarea.focus();
+            });
+        });
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            document.querySelector('.gradient-background').style.transform = 
+                `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+</body>
+</html>

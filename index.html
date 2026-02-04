@@ -54,6 +54,7 @@
             transition: all 0.2s;
             color: #808080;
             text-align: center;
+            text-decoration: none;
         }
 
          .nav-item svg { height: 30px;  }
@@ -77,13 +78,16 @@
         .nav-label {
             font-size: 10px;
             font-weight: 500;
+            color: inherit;
+            text-decoration: none;
+
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
-            overflow: auto;
             padding: 32px 48px;
+            position: relative;
         }
 
         /* Header Section */
@@ -484,6 +488,137 @@
             font-size: 16px;
         }
 
+        /* Animated Gradient Background */
+        .gradient-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, 
+                    rgba(139, 69, 139, 0.15) 0%,
+                    transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 50%, 
+                    rgba(218, 165, 32, 0.1) 0%,
+                    transparent 50%),
+                radial-gradient(ellipse 70% 50% at 20% 80%, 
+                    rgba(107, 142, 35, 0.08) 0%,
+                    transparent 50%),
+                linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            pointer-events: none;
+            animation: gradientShift 15s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.6), transparent);
+            border-radius: 50%;
+            animation: float 20s infinite;
+            opacity: 0.6;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 10s; }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Simple FadeIn Animation for Cards Only */
+        /* FadeInDown Animation for Cards (Scroll-Triggered) */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Initially hide cards until they scroll into view */
+        .featured-card,
+        .person-card,
+        .chatroom-card {
+            opacity: 0;
+        }
+
+        /* Animation class added by JavaScript on scroll */
+        .featured-card.animate,
+        .person-card.animate,
+        .chatroom-card.animate {            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        /* Staggered delays for one-by-one effect */
+        .featured-card:nth-child(1).animate { animation-delay: 0s; }
+        .featured-card:nth-child(2).animate { animation-delay: 0.15s; }
+        .featured-card:nth-child(3).animate { animation-delay: 0.3s; }
+
+        .person-card:nth-child(1).animate { animation-delay: 0s; }
+        .person-card:nth-child(2).animate { animation-delay: 0.1s; }
+        .person-card:nth-child(3).animate { animation-delay: 0.2s; }
+        .person-card:nth-child(4).animate { animation-delay: 0.3s; }
+        .person-card:nth-child(5).animate { animation-delay: 0.4s; }
+        .person-card:nth-child(6).animate { animation-delay: 0.5s; }
+        .person-card:nth-child(7).animate { animation-delay: 0.6s; }
+        .person-card:nth-child(8).animate { animation-delay: 0.7s; }
+
+        .chatroom-card:nth-child(1).animate { animation-delay: 0s; }
+        .chatroom-card:nth-child(2).animate { animation-delay: 0.1s; }
+        .chatroom-card:nth-child(3).animate { animation-delay: 0.2s; }
+        .chatroom-card:nth-child(4).animate { animation-delay: 0.3s; }
+        .chatroom-card:nth-child(5).animate { animation-delay: 0.4s; }
+        .chatroom-card:nth-child(6).animate { animation-delay: 0.5s; }
+        .chatroom-card:nth-child(7).animate { animation-delay: 0.6s; }
+        .chatroom-card:nth-child(8).animate { animation-delay: 0.7s; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .main-content {
@@ -536,277 +671,300 @@
 </svg>
         </div>
         
-        <div class="nav-item">
+        <a href="gennie.html" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="127" viewBox="0 0 120 127" fill="none">
-<path d="M30.4099 19.8269V55.0981M30.4099 90.0501L2 107.196M30.4099 90.0501L60 107.196M30.4099 90.0501V55.0981M118 107.196L89 124L60 107.196M118 107.196L89 90.3921M118 107.196V71.996L89 55.2702M89 90.3921L31 124L2 107.196M89 90.3921V55.0981V19.8042L60 3M2 107.196V72.8816L30.4099 55.0981M60 107.196V72.244M60 3L30.4099 19.8042M60 3V72.0742M89 55.2702L60 38.5445L30.4099 55.0981M89 55.2702L60 72.0742M60 72.0742V72.244M30.4099 55.0981L60 72.244" stroke="url(#paint0_linear_8185_20766)" stroke-width="4"/>
-<defs>
-<linearGradient id="paint0_linear_8185_20766" x1="2" y1="124" x2="140.256" y2="124" gradientUnits="userSpaceOnUse">
-<stop offset="0.0721154" stop-color="#F50157"/>
-<stop offset="0.740385" stop-color="#FFDA00"/>
-</linearGradient>
-</defs>
-</svg>
-            <span class="nav-label">UpGenie</span>
-        </div>
+                <path d="M30.4099 19.8269V55.0981M30.4099 90.0501L2 107.196M30.4099 90.0501L60 107.196M30.4099 90.0501V55.0981M118 107.196L89 124L60 107.196M118 107.196L89 90.3921M118 107.196V71.996L89 55.2702M89 90.3921L31 124L2 107.196M89 90.3921V55.0981V19.8042L60 3M2 107.196V72.8816L30.4099 55.0981M60 107.196V72.244M60 3L30.4099 19.8042M60 3V72.0742M89 55.2702L60 38.5445L30.4099 55.0981M89 55.2702L60 72.0742M60 72.0742V72.244M30.4099 55.0981L60 72.244" stroke="url(#paint0_linear_8185_20766)" stroke-width="4"/>
+                <defs>
+                <linearGradient id="paint0_linear_8185_20766" x1="2" y1="124" x2="140.256" y2="124" gradientUnits="userSpaceOnUse">
+                <stop offset="0.0721154" stop-color="#F50157"/>
+                <stop offset="0.740385" stop-color="#FFDA00"/>
+                </linearGradient>
+                </defs>
+                </svg>
+             <span class="nav-label">Genie</span>
+        </a>
 
-        <div class="nav-item">
+        <a href="#" class="nav-item">
            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFDE4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass h-[3.6vh] w-[3.6vh] min-h-[24px] min-w-[24px] p-1 ant-menu-item-icon"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path><circle cx="12" cy="12" r="10"></circle></svg>
             <span class="nav-label">Explore</span>
-        </div>
+        </a>
 
-        <div class="nav-item active">
+        <a href="index.html" class="nav-item active">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
-            <span class="nav-label">Connect</span>
-        </div>
+             <span class="nav-label">Connect</span>
+        </a>
 
-        <div class="nav-item">
+        <a href="#" class="nav-item">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
             <span class="nav-label">Feed</span>
-        </div>
+        </a>
 
-        <div class="nav-item">
+        <a href="#" class="nav-item">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
             <span class="nav-label">Future Forward</span>
-        </div>
+        </a>
 
         <div style="flex: 1;"></div>
 
-        <div class="nav-item">
+        <a href="#" class="nav-item">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
             <span class="nav-label">Chats</span>
-        </div>
+        </a>
 
-        <div class="nav-item">
+        <a href="#" class="nav-item">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
             <span class="nav-label">Profile</span>
-        </div>
+        </a>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">Connect</h1>
-            <p class="page-description">Connect with like-minded peers, find mentors, and join communities. Be part of meaningful discussions that help you grow.</p>
-        </div>
-
-        <!-- Search & Filter Bar -->
-        <div class="search-filter-bar">
-            <div class="search-input-wrapper">
-                <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" class="search-input" placeholder="Search people, communities, or topics...">
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Connect</h1>
+                <p class="page-description">Connect with like-minded peers, find mentors, and join communities. Be part of meaningful discussions that help you grow.</p>
             </div>
-            <button class="filter-button">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-                </svg>
-                Filters
-            </button>
-        </div>
 
-        <!-- Featured Communities Section -->
-        <div class="featured-section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="tag">Featured</span> Communities
-                </h2>
-                <a href="#" class="see-all-link">
-                    View All
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            <!-- Search & Filter Bar -->
+            <div class="search-filter-bar">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                </a>
-            </div>
-            <div class="featured-grid">
-                <div class="featured-card">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=400&fit=crop&q=80" alt="Book & Media Discussions" class="featured-card-image">
-                    <h3 class="featured-card-title">Book & Media Discussions</h3>
-                    <div class="featured-card-meta">
-                        <span>📚 Literature & Arts</span>
-                        <span>4 members</span>
-                    </div>
-                    <button class="featured-card-cta">Join Community</button>
+                    <input type="text" class="search-input" placeholder="Search people, communities, or topics...">
                 </div>
-                <div class="featured-card">
-                    <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&h=400&fit=crop&q=80" alt="Climate & Sustainability" class="featured-card-image">
-                    <h3 class="featured-card-title">Climate & Sustainability</h3>
-                    <div class="featured-card-meta">
-                        <span>🌱 Environment</span>
-                        <span>99 members</span>
-                    </div>
-                    <button class="featured-card-cta">Join Community</button>
-                </div>
-                <div class="featured-card">
-                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=400&fit=crop&q=80" alt="Career Growth" class="featured-card-image">
-                    <h3 class="featured-card-title">Career Growth & Development</h3>
-                    <div class="featured-card-meta">
-                        <span>💼 Professional</span>
-                        <span>100 members</span>
-                    </div>
-                    <button class="featured-card-cta">Join Community</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Discover People Section -->
-        <div class="featured-section">
-            <div class="section-header">
-                <h2 class="section-title">Discover People</h2>
-                <a href="#" class="see-all-link">
-                    View All
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                <button class="filter-button">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                     </svg>
-                </a>
+                    Filters
+                </button>
             </div>
-            <div class="discover-grid">
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&q=80" alt="Cognito An..." class="person-avatar">
-                    <h3 class="person-name">Cognito Anderson</h3>
-                    <p class="person-category">Arts And Entertainment</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&q=80" alt="Sarah" class="person-avatar">
-                    <h3 class="person-name">Sarah Thompson</h3>
-                    <p class="person-category">Technology & Innovation</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=80" alt="Krishna" class="person-avatar">
-                    <h3 class="person-name">Krishna Yadav</h3>
-                    <p class="person-category">Sustainable Development</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&q=80" alt="Kiaraaa" class="person-avatar">
-                    <h3 class="person-name">Kiaraaa Addd</h3>
-                    <p class="person-category">Administration & Management</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80" alt="Marcus" class="person-avatar">
-                    <h3 class="person-name">Marcus Chen</h3>
-                    <p class="person-category">Creative Design</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop&q=80" alt="Elena" class="person-avatar">
-                    <h3 class="person-name">Elena Rodriguez</h3>
-                    <p class="person-category">Education & Mentorship</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80" alt="James" class="person-avatar">
-                    <h3 class="person-name">James Wilson</h3>
-                    <p class="person-category">Business Strategy</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-                <div class="person-card">
-                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&q=80" alt="Priya" class="person-avatar">
-                    <h3 class="person-name">Priya Sharma</h3>
-                    <p class="person-category">Healthcare & Wellness</p>
-                    <button class="connect-button">+ Connect</button>
-                </div>
-            </div>
-        </div>
 
-        <!-- All Communities Section -->
-        <div class="featured-section">
-            <div class="section-header">
-                <h2 class="section-title">All Communities</h2>
-                <a href="#" class="see-all-link">
-                    View All
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </div>
-            <div class="chatrooms-grid">
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=400&fit=crop&q=80" alt="Book & Media" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Book & Media Discussions</h3>
-                        <p class="chatroom-members">4 members</p>
-                        <button class="join-button">Join</button>
-                    </div>
+            <!-- Featured Communities Section -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="tag">Featured</span> Communities
+                    </h2>
+                    <a href="#" class="see-all-link">
+                        View All
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
                 </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=400&fit=crop&q=80" alt="Career Growth" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Career Growth & Development</h3>
-                        <p class="chatroom-members">100 members</p>
-                        <button class="join-button">Join</button>
+                <div class="featured-grid">
+                    <div class="featured-card">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=400&fit=crop&q=80" alt="Book & Media Discussions" class="featured-card-image">
+                        <h3 class="featured-card-title">Book & Media Discussions</h3>
+                        <div class="featured-card-meta">
+                            <span>📚 Literature & Arts</span>
+                            <span>4 members</span>
+                        </div>
+                        <button class="featured-card-cta">Join Community</button>
                     </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&h=400&fit=crop&q=80" alt="Climate" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Climate & Sustainability</h3>
-                        <p class="chatroom-members">99 members</p>
-                        <button class="join-button">Join</button>
+                    <div class="featured-card">
+                        <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&h=400&fit=crop&q=80" alt="Climate & Sustainability" class="featured-card-image">
+                        <h3 class="featured-card-title">Climate & Sustainability</h3>
+                        <div class="featured-card-meta">
+                            <span>🌱 Environment</span>
+                            <span>99 members</span>
+                        </div>
+                        <button class="featured-card-cta">Join Community</button>
                     </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop&q=80" alt="Community" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Community Building & Support</h3>
-                        <p class="chatroom-members">100 members</p>
-                        <button class="join-button">Join</button>
-                    </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=400&fit=crop&q=80" alt="Tech Innovation" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Tech & Innovation Hub</h3>
-                        <p class="chatroom-members">156 members</p>
-                        <button class="join-button">Join</button>
-                    </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=400&fit=crop&q=80" alt="Fitness" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Fitness & Wellness</h3>
-                        <p class="chatroom-members">87 members</p>
-                        <button class="join-button">Join</button>
-                    </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&h=400&fit=crop&q=80" alt="Photography" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Photography & Visual Arts</h3>
-                        <p class="chatroom-members">203 members</p>
-                        <button class="join-button">Join</button>
-                    </div>
-                </div>
-                <div class="chatroom-card">
-                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=400&fit=crop&q=80" alt="Food" class="chatroom-image">
-                    <div class="chatroom-content">
-                        <h3 class="chatroom-title">Food & Culinary Culture</h3>
-                        <p class="chatroom-members">142 members</p>
-                        <button class="join-button">Join</button>
+                    <div class="featured-card">
+                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=400&fit=crop&q=80" alt="Career Growth" class="featured-card-image">
+                        <h3 class="featured-card-title">Career Growth & Development</h3>
+                        <div class="featured-card-meta">
+                            <span>💼 Professional</span>
+                            <span>100 members</span>
+                        </div>
+                        <button class="featured-card-cta">Join Community</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Unsplash Attribution -->
-        <div style="text-align: center; padding: 40px 20px; color: #808080; font-size: 12px; border-top: 1px solid #2a2a2a; margin-top: 60px;">
-            <p>Beautiful images from <a href="https://unsplash.com" target="_blank" rel="noopener" style="color: #ff6b35; text-decoration: none;">Unsplash</a></p>
+            <!-- Discover People Section -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title">Discover People</h2>
+                    <a href="#" class="see-all-link">
+                        View All
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="discover-grid">
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&q=80" alt="Cognito An..." class="person-avatar">
+                        <h3 class="person-name">Cognito Anderson</h3>
+                        <p class="person-category">Arts And Entertainment</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&q=80" alt="Sarah" class="person-avatar">
+                        <h3 class="person-name">Sarah Thompson</h3>
+                        <p class="person-category">Technology & Innovation</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=80" alt="Krishna" class="person-avatar">
+                        <h3 class="person-name">Krishna Yadav</h3>
+                        <p class="person-category">Sustainable Development</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&q=80" alt="Kiaraaa" class="person-avatar">
+                        <h3 class="person-name">Kiaraaa Addd</h3>
+                        <p class="person-category">Administration & Management</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80" alt="Marcus" class="person-avatar">
+                        <h3 class="person-name">Marcus Chen</h3>
+                        <p class="person-category">Creative Design</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop&q=80" alt="Elena" class="person-avatar">
+                        <h3 class="person-name">Elena Rodriguez</h3>
+                        <p class="person-category">Education & Mentorship</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80" alt="James" class="person-avatar">
+                        <h3 class="person-name">James Wilson</h3>
+                        <p class="person-category">Business Strategy</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                    <div class="person-card">
+                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&q=80" alt="Priya" class="person-avatar">
+                        <h3 class="person-name">Priya Sharma</h3>
+                        <p class="person-category">Healthcare & Wellness</p>
+                        <button class="connect-button">+ Connect</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Communities Section -->
+            <div class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title">All Communities</h2>
+                    <a href="#" class="see-all-link">
+                        View All
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="chatrooms-grid">
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=400&fit=crop&q=80" alt="Book & Media" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Book & Media Discussions</h3>
+                            <p class="chatroom-members">4 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=400&fit=crop&q=80" alt="Career Growth" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Career Growth & Development</h3>
+                            <p class="chatroom-members">100 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&h=400&fit=crop&q=80" alt="Climate" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Climate & Sustainability</h3>
+                            <p class="chatroom-members">99 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop&q=80" alt="Community" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Community Building & Support</h3>
+                            <p class="chatroom-members">100 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=400&fit=crop&q=80" alt="Tech Innovation" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Tech & Innovation Hub</h3>
+                            <p class="chatroom-members">156 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=400&fit=crop&q=80" alt="Fitness" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Fitness & Wellness</h3>
+                            <p class="chatroom-members">87 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&h=400&fit=crop&q=80" alt="Photography" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Photography & Visual Arts</h3>
+                            <p class="chatroom-members">203 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                    <div class="chatroom-card">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=400&fit=crop&q=80" alt="Food" class="chatroom-image">
+                        <div class="chatroom-content">
+                            <h3 class="chatroom-title">Food & Culinary Culture</h3>
+                            <p class="chatroom-members">142 members</p>
+                            <button class="join-button">Join</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
         </div>
 
     </div>
+
+    <script>
+        // Scroll-triggered animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const animateOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    animateOnScroll.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.featured-card, .person-card, .chatroom-card').forEach(card => {
+            animateOnScroll.observe(card);
+        });
+    </script>
+
 </body>
 </html>
