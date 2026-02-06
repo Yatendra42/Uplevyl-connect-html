@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gennie - AI Assistant Platform</title>
-    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=_uuUEKnrV398xxlBhkc8CEZ5aQjFC_aRge2UabNfD90o1UXVhtspAZ19tsspRVwJQuZQ_RsvvHActLG7l5kLbrA6mcMJLMZfoVQF2nf1LmI" charset="UTF-8"></script><style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
             min-height: 100vh;
             overflow: hidden;
             font-size: 16px;
-        }
+        
 
         /* Sidebar Navigation */
         .sidebar {
@@ -100,81 +100,17 @@
             overflow: hidden;
         }
 
-        /* Animated Gradient Background */
+        /* Simple Static Gradient Background - Optimized */
         .gradient-background {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 50% -20%, 
-                    rgba(139, 69, 139, 0.25) 0%,
-                    transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 50%, 
-                    rgba(218, 165, 32, 0.15) 0%,
-                    transparent 50%),
-                radial-gradient(ellipse 70% 50% at 20% 80%, 
-                    rgba(107, 142, 35, 0.12) 0%,
-                    transparent 50%),
-                linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
-            pointer-events: none;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        /* Floating Particles */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
             pointer-events: none;
         }
 
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, rgba(255, 107, 53, 0.8), transparent);
-            border-radius: 50%;
-            animation: float 20s infinite;
-            opacity: 0.6;
-        }
-
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 25%; animation-delay: 2s; }
-        .particle:nth-child(3) { left: 40%; animation-delay: 4s; }
-        .particle:nth-child(4) { left: 55%; animation-delay: 6s; }
-        .particle:nth-child(5) { left: 70%; animation-delay: 8s; }
-        .particle:nth-child(6) { left: 85%; animation-delay: 10s; }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* Top Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -182,8 +118,7 @@
             padding: 24px 48px;
             position: relative;
             z-index: 10;
-            backdrop-filter: blur(20px);
-            background: rgba(10, 10, 10, 0.6);
+            background: rgba(10, 10, 10, 0.8);
         }
 
         .page-title {
@@ -247,7 +182,6 @@
             padding: 40px;
             position: relative;
             z-index: 10;
-            padding-top: 0;
         }
 
         .hero-greeting {
@@ -354,10 +288,10 @@
         .suggestions-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
+            gap: 20px;
             width: 100%;
             max-width: 900px;
-            margin-bottom: 3rem;
+            margin-bottom: 40px;
         }
 
         .suggestion-card {
@@ -370,8 +304,6 @@
             backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
-            width: 17.87rem;
-            height: 11.12rem;
         }
 
         .suggestion-card::before {
@@ -430,7 +362,7 @@
         }
 
         .suggestion-description {
-            font-size: 12px;
+            font-size: 14px;
             color: #b3b3b3;
             line-height: 1.5;
             position: relative;
@@ -452,8 +384,7 @@
             border-radius: 1.25rem;
             padding: 1.75rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 56.25em;
-            height: 13.57rem;
+            min-height: 11.25rem;
             backdrop-filter: blur(20px);
             box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
         }
@@ -630,26 +561,12 @@
         /* Mobile screens */
         @media (max-width: 768px) {
             .main-content {
-                margin-left: 3.75rem;
+                margin-left: 0;
             }
 
             .sidebar {
-                width: 3.75rem;
-                padding: 1rem 0;
-            }
-            
-            .sidebar-logo {
-                width: 2rem;
-                height: 2rem;
-            }
-            
-            .nav-item {
-                width: 3rem;
-                height: 3rem;
-            }
-            
-            .nav-label {
-                display: none;
+                width: 60px;
+                padding: 16px 0;
             }
 
             .page-title {
@@ -832,54 +749,12 @@
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
 
+        /* Simplified animations - removed staggered delays */
         .suggestion-card {
-            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .suggestion-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .suggestion-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .suggestion-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .hero-tagline {
-            animation-delay: 0.1s;
-        }
-
-        .discovery-button {
-            animation-delay: 0.2s;
-        }
-
-        .input-container {
-            animation-delay: 0.4s;
-        }
-
-        .evolution-notice {
-            animation-delay: 0.5s;
-        }
-
-        .quick-actions {
-            animation: fadeIn 1s ease-out backwards;
-            animation-delay: 0.6s;
-        }
-
-        /* Glow effect */
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
-            }
-        }
-
-   
+        /* Removed glow animation for better performance */
     </style>
 </head>
 <body>
@@ -973,19 +848,9 @@
         <!-- Gradient Background -->
         <div class="gradient-background"></div>
 
-        <!-- Floating Particles -->
-        <div class="particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
-
         <!-- Top Bar -->
         <div class="top-bar">
-            <h1 class="page-title">UpGenie</h1>
+            <h1 class="page-title">Gennie</h1>
             <div class="top-actions">
                 <button class="icon-button">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
